@@ -22,8 +22,8 @@ then for installation:
 ```
 
 Installation problems:
-- screen frezze can occour
-- can fail from itself
+- screen frezze can occur
+- can fail from itself, because of RAM
 
 Solution: Just restart the RaspberryPi and run it again. Till its completly finished
 
