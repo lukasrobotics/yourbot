@@ -1,4 +1,5 @@
 #!/bin/bash -eu
+# The BSD License
 
 
 name_ros_distro=noetic 
@@ -6,76 +7,49 @@ user_name=$(whoami)
 echo "#######################################################################################################################"
 echo ""
 echo "ROS Noetic + Moveit + YourBot Installation, can take up to three or four hours"
-
-#Getting version and release number of Ubuntu
 version=`lsb_release -sc`
 relesenum=`grep DISTRIB_DESCRIPTION /etc/*-release | awk -F 'Ubuntu ' '{print $2}' | awk -F ' LTS' '{print $1}'`
 echo ">>> {Ubuntu version is: [Ubuntu $version $relesenum]}"
-#Checking version is focal, if yes proceed othervice quit
 case $version in
   "focal" )
   ;;
   *)
-    echo ">>> {ERROR:script will only work on Focal (20.04).}"
+    echo "ERROR:script will only work on Focal (20.04)"
     exit 0
 esac
-
 echo "#######################################################################################################################"
 echo "1: Configure  Ubuntu "
 echo ""
-
-
 sudo add-apt-repository universe
 sudo add-apt-repository restricted
 sudo add-apt-repository multiverse
-
-echo ""
-echo ">>> {Done: Added Ubuntu repositories}"
 echo ""
 echo "#######################################################################################################################"
 echo " 2: Setup sources.list"
 echo ""
-
-#This will add the ROS Noetic package list to sources.list 
 sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu ${version} main\" > /etc/apt/sources.list.d/ros-latest.list"
-
-#Checking file added or not
 if [ ! -e /etc/apt/sources.list.d/ros-latest.list ]; then
   echo "Error: Unable to add sources.list"
   exit 0
 fi
-
-
 echo ""
 echo "#######################################################################################################################"
 echo " 3: Set up  keys"
-
-
-
 sudo apt install curl
-
-
 echo "#######################################################################################################################"
 echo ""
-
 ret=$(curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC1CF6E31E6BADE8868B172B4F42ED6FBAB17C654' | sudo apt-key add -)
-
-#Checking return value is OK
 case $ret in
   "OK" )
   ;;
   *)
     echo ">>> {ERROR: Unable to add ROS keys}"
     exit 0
-esac
-
-echo ">>> {Done: Added Keys}"
 echo ""
 echo "#######################################################################################################################"
 echo "4: Updating, this will take few minutes"
 echo ""
 sudo apt update
-
 package_type="desktop-full"
 echo "#######################################################################################################################"
 echo ""
@@ -85,21 +59,10 @@ sudo apt-get install -y ros-${name_ros_distro}-${package_type}
 #echo ""
 #echo ""
 echo "#######################################################################################################################"
-echo ">>> 6" 
-
+echo "6" 
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-#sudo source /opt/ros/noetic/setup.bash
-#source /home/$user_name/.bashrc
-#echo ""
 echo "#######################################################################################################################"
-
-#echo ""
-#echo ">>> {Type [ rosversion -d ] to get the current ROS installed version}"
-#echo ""
-#echo "#######################################################################################################################"
-echo "#######################################################################################################################"
-echo "8"
-# start ros setup
+echo "8: start ROS setup"
 sudo apt-get update
 echo "#######################################################################################################################"
 echo "9"
@@ -115,15 +78,13 @@ echo "##########################################################################
 echo "12"
 cd ~/catkin_ws/
 echo "#######################################################################################################################"
-echo "13"
+echo "13: run catkin_make"
 catkin_make
 echo "#######################################################################################################################"
 echo "14"
 source devel/setup.bash
 echo "#######################################################################################################################"
-echo "15"
-
-#start moveit install
+echo "15:"
 echo "start install moveit"
 sudo apt install -y ros-noetic-moveit
 echo "#######################################################################################################################"
@@ -152,7 +113,6 @@ echo "23"
 cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "24"
-
 wstool init . || cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "25"
@@ -165,25 +125,21 @@ echo "27"
 wstool update -t . || cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "28"
-
 cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "29"
 git clone https://github.com/ros-planning/moveit_tutorials.git -b master || cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "30"
-
 git clone https://github.com/ros-planning/panda_moveit_config.git -b melodic-devel || cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "31"
-
 cd ~/ws_moveit/src
 echo "#######################################################################################################################"
 echo "32"
 rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 echo "#######################################################################################################################"
 echo "33"
-
 sudo sh -c 'echo "deb http://packages.ros.org/ros-testing/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 echo "#######################################################################################################################"
 echo "34"
@@ -200,7 +156,6 @@ catkin config --extend /opt/ros/${ROS_DISTRO} --cmake-args -DCMAKE_BUILD_TYPE=Re
 echo "#######################################################################################################################"
 echo ">>>38: build moveit packages, this can take up too three hours. so go do something else"
 catkin build --jobs 2
-
 echo "#######################################################################################################################"
 echo "39 install lib"
 sudo apt-get install -y python3-pip
@@ -224,7 +179,6 @@ echo "44: creating programm links"
 cd ~/ws_moveit/yourbot/yourbot_build
 chmod u+x yourbot_build
 ln -s ~/ws_moveit/yourbot/yourbot_build/yourbot_build ~/ws_moveit || cd ~/ws_moveit/yourbot/yourbot_build
-
 cd ~/ws_moveit
 chmod u+x yourbot_build
 
