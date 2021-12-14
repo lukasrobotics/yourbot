@@ -29,18 +29,18 @@ Solution: Just restart the RaspberryPi and run it again. Till its completly fini
 
 Programing:
 
-node python file header:
-#build data-start_
-#enter the package name here: example_node
-#enter all the dependencies here: rospy 
-#enter if its a node or a launch file: py
-#enter your config folder and file: panda_moveit_config demo.launch
-#build data-end:
+node python file header: with # in before all arguments
+build data-start_
+enter the package name here: example_node
+enter all the dependencies here: rospy 
+enter if its a node or a launch file: py
+enter your config folder and file: panda_moveit_config demo.launch
+build data-end:
 
-launch file header:
-<!--
-#enter the package name here: example_launch
-#enter all the dependencies here: rospy 
-#enter if its a node or a launch file: launch
-#enter your config folder and file: panda_moveit_config demo.launch
--->
+launch file header: with launch file comment out --> arround all of it
+
+enter the package name here: example_launch
+enter all the dependencies here: rospy 
+enter if its a node or a launch file: launch
+enter your config folder and file: panda_moveit_config demo.launch
+
